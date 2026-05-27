@@ -6,11 +6,15 @@ require('dotenv').config();
 
 const app = express();
 
-// ─── Middleware ───────────────────────────────────────
+// ─── CORS ─────────────────────────────────────────────
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'https://task-flow-taskmanager.vercel.app',
+  ],
   credentials: true,
 }));
+
 app.use(express.json());
 
 // ─── Routes ──────────────────────────────────────────
@@ -22,7 +26,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Task Manager API is running ✅' });
 });
 
-// ─── Connect to MongoDB then start server ─────────────
+// ─── Connect MongoDB + Start Server ───────────────────
 const PORT = process.env.PORT || 5000;
 
 mongoose
