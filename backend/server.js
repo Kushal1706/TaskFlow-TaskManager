@@ -6,12 +6,23 @@ require('dotenv').config();
 
 const app = express();
 
-// ─── CORS ─────────────────────────────────────────────
+// ─── CORS — Allow all Vercel deployments ──────────────
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://task-flow-taskmanager.vercel.app',
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+
+    // Allow localhost
+    if (origin.includes('localhost')) return callback(null, true);
+
+    // Allow any vercel.app domain
+    if (origin.includes('vercel.app')) return callback(null, true);
+
+    // Allow render.com
+    if (origin.includes('onrender.com')) return callback(null, true);
+
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 
